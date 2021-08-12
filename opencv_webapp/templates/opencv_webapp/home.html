@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p>
+          <button type="button" onclick="camb(1)">Activa punto 1</button>
+        </p>
+        <p>
+          <button type="button" onclick="camb(2)">Activa punto 2</button>
+        </p>
+        <p>
+          <button type="button" onclick="camb(3)">Activa punto 3</button>
+        </p>
+        <p>
+          <button type="button" onclick="camb(4)">Activa punto 4</button>
+        </p>
+      </div>
+      <div class="col">
+        <form method="POST" class="post-form" enctype="multipart/form-data">
+          {% csrf_token %}
+          <p id="caso1">
+            <input type="text" id="p1x" name="p1x" >
+            <input type="text" id="p1y" name="p1y" >
+          </p>
+          <p id="caso2">
+            <input type="text" id="p2x" name="p2x" >
+            <input type="text" id="p2y" name="p2y" >
+          </p>
+          <p id="caso3">
+            <input type="text" id="p3x" name="p3x" >
+            <input type="text" id="p3y" name="p3y" >
+          </p>
+          <p id="caso4">
+            <input type="text" id="p4x" name="p4x" >
+            <input type="text" id="p4y" name="p4y" >
+          </p>
+          <button type="submit" class="btn btn-primary" value=""upload">Autoajustar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+{% block javascript %}
+  <script>
+    let val=1;
+    let bx=400;
+    let by=400;
+    let list=[[0,0],[0,0],[0,0],[0,0]];
+    var img;
+    function preload() {
+      img = loadImage("/media/prueba.jpg");
+      console.log(img)
+    }
+    function camb(t){
+      val=t;
+    }
+    function setup(){
+      bx=img.width;
+      by=img.height;
+      createCanvas(bx,by);
+      background(img);
+    }
+    function draw(){
+      background(img);
+      for ( let p of list ){
+        stroke (120,150,255);
+        noFill ();
+        rectMode ( CENTER );
+        strokeWeight (10);
+        point( p[0], p[1] );
+			}
+      if (mouseIsPressed){
+        for (let i = 0; i < 1; i++){
+          let px=mouseX;
+          let py=mouseY;
+          if(0<=px && px<=bx && 0<=py && py<=by){
+            if(val==1){
+              list[0]=[px,py];
+              document.getElementById("caso1").innerHTML = "<input type='text' id='p1x' name='p1x' value='"+px+"'>"+"<input type='text' id='p1x' name='p1x' value='"+py+"'>";
+            }
+            if(val==2){
+              list[1]=[px,py];
+              document.getElementById("caso2").innerHTML = "<input type='text' id='p2x' name='p2x' value='"+px+"'>"+"<input type='text' id='p2x' name='p2x' value='"+py+"'>";
+            }
+            if(val==3){
+              list[2]=[px,py];
+              document.getElementById("caso3").innerHTML = "<input type='text' id='p3x' name='p3x' value='"+px+"'>"+"<input type='text' id='p3x' name='p3x' value='"+py+"'>";
+            }
+            if(val==4){
+              list[3]=[px,py];
+              document.getElementById("caso4").innerHTML = "<input type='text' id='p4x' name='p4x' value='"+px+"'>"+"<input type='text' id='p4x' name='p4x' value='"+py+"'>";
+            }
+          }
+        }
+      }
+    }
+  </script>
+{% endblock javascript %}
